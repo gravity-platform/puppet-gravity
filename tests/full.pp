@@ -10,7 +10,7 @@ node default {
      class { 'epel':
        before => Class['syslogng']
      }
-   },
+   }
    default: {}
  }
 
