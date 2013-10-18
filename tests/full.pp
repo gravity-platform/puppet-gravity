@@ -1,7 +1,10 @@
 /**
- * puppet site containing a default node that install the whole shebang
+ * Puppet site containing a node for installing the whole shebang.
  *
- * This site.pp is used by vagrant so set up the local machine.
+ * This site.pp is used by vagrant to set up the local machine. It has
+ * been tested against CentOS 6.4.
+ *
+ * Use this site as inspiration for setting up your roles and profiles.
  */
 node default {
 
@@ -28,6 +31,7 @@ node default {
       'sudo'      => {},
       'sshd'      => {},
       'mod_php'   => {},
+      'crond'     => {},
     }
   )
 
@@ -39,6 +43,8 @@ node default {
     'apache::mod::mime':
       ;
     'apache::mod::php':
+      ;
+    'apache::mod::dir':
       ;
     'apache::mod::alias':
       ;
