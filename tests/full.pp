@@ -34,8 +34,16 @@ node default {
   class {
     'syslogng':
       logpaths => $syslog_logpaths_real;
+    'apache':
+      ;
     'gravity':
   }
 
+  apache::vhost { $hostname:
+    port => 80,
+    docroot => '/vagrant/web'
+  }
+
   Class['syslogng'] -> Class['gravity']
+  Apache::Vhost[$hostname] -> Class['gravity']
 }
