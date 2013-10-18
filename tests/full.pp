@@ -13,6 +13,11 @@ node default {
       class { 'epel':
         before => Class['syslogng']
       }
+      package { 'rsyslog':
+        ensure => purged,
+	before => Class['syslogng']
+      }
+
 
       $distro_syslog_logpaths = {
         # @todo create this in syslogng module
