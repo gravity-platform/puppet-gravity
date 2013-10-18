@@ -35,6 +35,12 @@ node default {
     'syslogng':
       logpaths => $syslog_logpaths_real;
     'apache':
+      default_mods => false;
+    'apache:mod:php':
+      ;
+    'apache:mod:alias':
+      ;
+    'apache:mode:status':
       ;
     'gravity':
   }
