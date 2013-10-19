@@ -59,6 +59,10 @@ node default {
       ;
   }
 
+  resources { 'firewall':
+    purge => true
+  }
+
   apache::vhost { $hostname:
     port => 80,
     docroot => '/vagrant/web'
