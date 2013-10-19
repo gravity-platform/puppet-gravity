@@ -44,7 +44,8 @@ node default {
     'syslogng':
       logpaths => $syslog_logpaths_real;
     'apache':
-      default_mods => false;
+      default_mods  => false,
+      default_vhost => false;
     'apache::mod::mime':
       ;
     'apache::mod::php':
