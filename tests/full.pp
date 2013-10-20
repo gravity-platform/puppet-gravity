@@ -14,14 +14,14 @@ node default {
         before => Class['syslogng']
       }
       package { 'rsyslog':
-        ensure => absent,
-	before => Class['syslogng']
+        ensure  => absent,
+	require => Class['syslogng']
       }
 
-
       $distro_syslog_logpaths = {
-        # @todo create this in syslogng module
-        # 'yum' => {},
+        'yum'      => {},
+	'anacron'  => {},
+	'dhclient' => {}.
       }
     }
     default: {
@@ -75,6 +75,5 @@ node default {
 
   Class['syslogng'] -> Class['gravity']
   File['/vagrant/web'] -> Apache::Vhost[$hostname]
-  Resources['firewall'] -> Class['apache']
   Apache::Vhost[$hostname] -> Class['gravity']
 }
