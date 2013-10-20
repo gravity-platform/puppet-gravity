@@ -14,7 +14,7 @@ node default {
         before => Class['syslogng']
       }
       package { 'rsyslog':
-        ensure => purged,
+        ensure => absent,
 	before => Class['syslogng']
       }
 
