@@ -64,11 +64,17 @@ node default {
     purge => true
   }
 
+  file { '/vagrant/web':
+    ensure => directory
+  }
+
   apache::vhost { $hostname:
-    port => 80,
-    docroot => '/vagrant/web'
+    port            => 80,
+    docroot         => '/vagrant/web'
   }
 
   Class['syslogng'] -> Class['gravity']
+  File['/vagrant/web'] -> Apache::Vhost[$hostname]
+  Resources['firewall'] -> Class['apache']
   Apache::Vhost[$hostname] -> Class['gravity']
 }
