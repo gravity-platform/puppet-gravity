@@ -21,7 +21,7 @@ node default {
       $distro_syslog_logpaths = {
         'yum'      => {},
 	'anacron'  => {},
-	'dhclient' => {}.
+	'dhclient' => {},
       }
     }
     default: {
