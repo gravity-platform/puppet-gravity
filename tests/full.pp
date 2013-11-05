@@ -90,10 +90,9 @@ node default {
     port            => 80,
     docroot         => '/vagrant/web',
     rewrite_cond    => [
-      '%{REQUEST_FILENAME} -s [OR]',
-      '%{REQUEST_FILENAME} -d',
+      '%{REQUEST_URI}  !(\.html|\.css|\.less|\.js|\.otf|\.eot|\.svg|\.ttf|\.woff)$',
     ],
-    rewrite_rule    => '/(.*) /app_dev.php/$1 [NC,L]',
+    rewrite_rule    => '(.*) /app_dev.php/$1 [QSA]',
   }
 
   Class['syslogng'] -> Class['gravity']

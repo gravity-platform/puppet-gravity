@@ -1,5 +1,5 @@
 name 'gravity-platform'
-version '0.2.0-dev'
+version '0.2.1-dev'
 
 author 'Lucas S. Bickel'
 license 'GPL3+'
