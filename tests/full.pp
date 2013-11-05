@@ -62,8 +62,10 @@ node default {
     'apache::mod::php':
       ;
     'apache::mod::dir':
-      ;
+      indexes => [];
     'apache::mod::alias':
+      ;
+    'apache::mod::rewrite':
       ;
     'apache::mod::status':
       ;
@@ -87,7 +89,11 @@ node default {
   apache::vhost { $hostname:
     port            => 80,
     docroot         => '/vagrant/web',
-    rewrite_rule    => '/(.*) /app_dev.php/$1 [L]',
+    rewrite_cond    => [
+      '%{REQUEST_FILENAME} -s [OR]',
+      '%{REQUEST_FILENAME} -d',
+    ],
+    rewrite_rule    => '/(.*) /app_dev.php/$1 [NC,L]',
   }
 
   Class['syslogng'] -> Class['gravity']
