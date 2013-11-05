@@ -17,7 +17,7 @@ node default {
         'rsyslog':
           ensure  => absent,
 	  require => Class['syslogng'];
-	['php-xml', 'php-pdo']:
+	['php-xml', 'php-pdo', 'php-pecl-mongo']:
 	  ensure => present,
 	  before => Class['apache::mod::php'];
       }
@@ -52,6 +52,8 @@ node default {
   class {
     'syslogng':
       logpaths => $syslog_logpaths_real;
+    'mongodb':
+      ;
     'apache':
       default_mods  => false,
       default_vhost => false;
