@@ -13,9 +13,13 @@ node default {
       class { 'epel':
         before => Class['syslogng']
       }
-      package { 'rsyslog':
-        ensure  => absent,
-	require => Class['syslogng']
+      package {
+        'rsyslog':
+          ensure  => absent,
+	  require => Class['syslogng'];
+	['php-xml', 'php-pdo']:
+	  ensure => present,
+	  before => Class['apache::mod::php'];
       }
 
       $distro_syslog_logpaths = {
@@ -39,6 +43,11 @@ node default {
       'crond'     => {},
     }
   )
+
+  file { '/etc/php.d/timezone.ini':
+    content => 'date.timezone=Europe/Zurich',
+    notify  => Class['apache']
+  }
 
   class {
     'syslogng':
@@ -64,13 +73,19 @@ node default {
     purge => true
   }
 
-  file { '/vagrant/web':
-    ensure => directory
+  file {
+    '/vagrant/web':
+      ensure => directory;
+    '/vagrant/app/cache/dev':
+      ensure => '/tmp';
+    '/vagrant/app/logs':
+      ensure => '/tmp'
   }
 
   apache::vhost { $hostname:
     port            => 80,
-    docroot         => '/vagrant/web'
+    docroot         => '/vagrant/web',
+    rewrite_rule    => '/(.*) /app_dev.php/$1 [L]',
   }
 
   Class['syslogng'] -> Class['gravity']
