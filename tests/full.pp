@@ -13,9 +13,13 @@ node default {
       class { 'epel':
         before => Class['syslogng']
       }
-      package { 'rsyslog':
-        ensure  => absent,
-	require => Class['syslogng']
+      package {
+        'rsyslog':
+          ensure  => absent,
+	  require => Class['syslogng'];
+	['php-xml', 'php-pdo', 'php-pecl-mongo']:
+	  ensure => present,
+	  before => Class['apache::mod::php'];
       }
 
       $distro_syslog_logpaths = {
@@ -40,9 +44,16 @@ node default {
     }
   )
 
+  file { '/etc/php.d/timezone.ini':
+    content => 'date.timezone=Europe/Zurich',
+    notify  => Class['apache']
+  }
+
   class {
     'syslogng':
       logpaths => $syslog_logpaths_real;
+    'mongodb':
+      ;
     'apache':
       default_mods  => false,
       default_vhost => false;
@@ -51,8 +62,10 @@ node default {
     'apache::mod::php':
       ;
     'apache::mod::dir':
-      ;
+      indexes => [];
     'apache::mod::alias':
+      ;
+    'apache::mod::rewrite':
       ;
     'apache::mod::status':
       ;
@@ -64,13 +77,23 @@ node default {
     purge => true
   }
 
-  file { '/vagrant/web':
-    ensure => directory
+  file {
+    '/vagrant/web':
+      ensure => directory;
+    '/vagrant/app/cache/dev':
+      ensure => '/tmp';
+    '/vagrant/app/logs':
+      ensure => '/tmp'
   }
 
   apache::vhost { $hostname:
     port            => 80,
-    docroot         => '/vagrant/web'
+    docroot         => '/vagrant/web',
+    rewrite_cond    => [
+      '%{REQUEST_FILENAME} -s [OR]',
+      '%{REQUEST_FILENAME} -d',
+    ],
+    rewrite_rule    => '/(.*) /app_dev.php/$1 [NC,L]',
   }
 
   Class['syslogng'] -> Class['gravity']
