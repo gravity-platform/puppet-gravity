@@ -50,6 +50,7 @@ node default {
 
   file { '/etc/php.d/timezone.ini':
     content => 'date.timezone=Europe/Zurich',
+    require => Class['apache::mod::php'],
     notify  => Class['apache']
   }
 
@@ -87,7 +88,8 @@ node default {
     '/vagrant/app/cache/dev':
       ensure => '/tmp';
     '/vagrant/app/logs':
-      ensure => '/tmp'
+      ensure => '/tmp',
+      force  => true
   }
 
   apache::vhost { $hostname:
