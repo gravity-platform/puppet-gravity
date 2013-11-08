@@ -10,8 +10,12 @@ node default {
 
   case $::osfamily {
     'RedHat': {
-      class { 'epel':
-        before => Class['syslogng']
+      class {
+        'epel':
+	  before => Class['hairmareyumrepo'];
+        'hairmareyumrepo':
+          before => Class['syslogng']
+
       }
       package {
         'rsyslog':
