@@ -21,6 +21,9 @@ node default {
         'rsyslog':
           ensure  => absent,
 	  require => Class['syslogng'];
+	'syslog-ng-mongodb':
+	  ensure => present,
+	  before => Class['mongodb'];
 	['php-xml', 'php-pdo', 'php-pecl-mongo']:
 	  ensure => present,
 	  before => Class['apache::mod::php'];
@@ -50,7 +53,7 @@ node default {
 
   file { '/etc/php.d/timezone.ini':
     content => 'date.timezone=Europe/Zurich',
-    require => Class['apache::mod::php'],
+    before  => Class['apache::mod::php'],
     notify  => Class['apache']
   }
 
