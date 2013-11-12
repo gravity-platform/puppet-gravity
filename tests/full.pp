@@ -10,13 +10,20 @@ node default {
 
   case $::osfamily {
     'RedHat': {
-      class { 'epel':
-        before => Class['syslogng']
+      class {
+        'epel':
+	  before => Class['hairmareyumrepo'];
+        'hairmareyumrepo':
+          before => Class['syslogng']
+
       }
       package {
         'rsyslog':
           ensure  => absent,
 	  require => Class['syslogng'];
+	'syslog-ng-mongodb':
+	  ensure => present,
+	  before => Class['mongodb'];
 	['php-xml', 'php-pdo', 'php-pecl-mongo']:
 	  ensure => present,
 	  before => Class['apache::mod::php'];
@@ -46,6 +53,7 @@ node default {
 
   file { '/etc/php.d/timezone.ini':
     content => 'date.timezone=Europe/Zurich',
+    before  => Class['apache::mod::php'],
     notify  => Class['apache']
   }
 
@@ -83,7 +91,8 @@ node default {
     '/vagrant/app/cache/dev':
       ensure => '/tmp';
     '/vagrant/app/logs':
-      ensure => '/tmp'
+      ensure => '/tmp',
+      force  => true
   }
 
   apache::vhost { $hostname:
