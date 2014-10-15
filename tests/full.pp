@@ -15,15 +15,20 @@ node default {
         '::yum':
           ;
         '::ius':
-          before => Package['php55u-pecl-mongo'];
+          before => [
+            Package['php55u-pdo'],
+            Package['php55u-pecl-mongo'],
+          ];
         '::yum::repo::mongodb':
           before => Package['mongodb-org'];
       }
 
       package {
-	['php55u-pdo', 'php55u-pecl-mongo']:
-	  ensure => present,
-	  before => Class['apache::mod::php'];
+        'php55u-mysqlnd':
+          before => Package['php55u-pdo'];
+        ['php55u-pdo', 'php55u-pecl-mongo', ]:
+          ensure => present,
+          before => Class['apache::mod::php'];
       }
     }
   }
@@ -48,7 +53,7 @@ node default {
     'apache::mod::mime':
       ;
     'apache::mod::php':
-      ;
+      package_name => 'php55u';
     'apache::mod::alias':
       ;
     'apache::mod::rewrite':
