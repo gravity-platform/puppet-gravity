@@ -11,8 +11,13 @@ node default {
   case $::osfamily {
     'RedHat': {
 
-      class { '::ius':
-        before => Package['php55u-pecl-mongo'];
+      class {
+        '::yum':
+          ;
+        '::ius':
+          before => Package['php55u-pecl-mongo'];
+        '::yum::repo::mongodb':
+          before => Package[mongodb-server];
       }
 
       package {
@@ -52,9 +57,9 @@ node default {
       ;
   }
 
-  resources { 'firewall':
-    purge => true
-  }
+  #resources { 'firewall':
+  #  purge => true
+  #}
 
   file {
     '/vagrant/web':
