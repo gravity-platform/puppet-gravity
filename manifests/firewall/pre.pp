@@ -38,9 +38,4 @@ class gravity::firewall::pre {
     reject => 'icmp-host-prohibited',
     action => "reject",
   }
-  firewall { '900 reject all other FORWARD requests':
-    reject => 'icmp-host-prohibited',
-    chain  => 'FORWARD',
-    action => 'reject',
-  }
 }
