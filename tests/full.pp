@@ -97,10 +97,13 @@ node default {
   apache::vhost { $hostname:
     port            => 80,
     docroot         => '/vagrant/web',
-    rewrite_cond    => [
-      '%{REQUEST_URI}  !(\.html|\.css|\.less|\.js|\.otf|\.eot|\.svg|\.ttf|\.woff)$',
-    ],
-    rewrite_rule    => '(.*) /app_dev.php/$1 [QSA]',
+    rewrites => [
+      {
+        comment      => 'single page url',
+        rewrite_cond => ['%{REQUEST_URI}  !(\.html|\.css|\.less|\.js|\.otf|\.eot|\.svg|\.ttf|\.woff)$'],
+        rewrite_rule => ['(.*) /app_dev.php/$1 [QSA]'],
+      },
+    ]
   }
 
   File['/vagrant/web'] -> Apache::Vhost[$hostname]
