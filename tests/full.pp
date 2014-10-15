@@ -17,7 +17,7 @@ node default {
         '::ius':
           before => Package['php55u-pecl-mongo'];
         '::yum::repo::mongodb':
-          before => Package[mongodb-server];
+          before => Class[mongodb];
       }
 
       package {
@@ -39,7 +39,7 @@ node default {
 
   class {
     'mongodb':
-      ;
+      packagename => 'mongodb-org';
     'apache':
       default_mods  => false,
       default_vhost => false;
