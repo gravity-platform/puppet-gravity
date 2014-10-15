@@ -18,6 +18,7 @@ node default {
           before => [
             Package['php55u-pdo'],
             Package['php55u-pecl-mongo'],
+            Package['php55u-mysqlnd'],
           ];
         '::yum::repo::mongodb':
           before => Package['mongodb-org'];
