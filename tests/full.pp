@@ -17,7 +17,7 @@ node default {
         '::ius':
           before => Package['php55u-pecl-mongo'];
         '::yum::repo::mongodb':
-          before => Class[mongodb];
+          before => Package['mongodb-org'];
       }
 
       package {
