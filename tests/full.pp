@@ -26,10 +26,11 @@ node default {
 
       package {
         'php55u-mysqlnd':
-          before => Package['php55u-pdo'];
+          before => Package['php55u-pdo'],
+          notify => Class['::apache'];
         ['php55u-pdo', 'php55u-pecl-mongo', ]:
           ensure => present,
-          before => Class['apache::mod::php'];
+          before => Class['::apache::mod::php'];
       }
     }
   }
@@ -39,8 +40,8 @@ node default {
       ensure => directory;
     '/etc/php.d/timezone.ini':
       content => 'date.timezone=Europe/Zurich',
-      before  => Class['apache::mod::php'],
-      notify  => Class['apache']
+      before  => Class['::apache::mod::php'],
+      notify  => Class['::apache']
   }
 
   class {
@@ -48,18 +49,18 @@ node default {
       user         => 'mongod',
       group        => 'mongod',
       package_name => 'mongodb-org';
-    'apache':
+    '::apache':
       default_mods  => false,
       default_vhost => false;
-    'apache::mod::mime':
+    '::apache::mod::mime':
       ;
-    'apache::mod::php':
+    '::apache::mod::php':
       package_name => 'php55u';
-    'apache::mod::alias':
+    '::apache::mod::alias':
       ;
-    'apache::mod::rewrite':
+    '::apache::mod::rewrite':
       ;
-    'apache::mod::status':
+    '::apache::mod::status':
       ;
     'gravity':
       ;
