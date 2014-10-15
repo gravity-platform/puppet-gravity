@@ -12,7 +12,7 @@ node default {
     'RedHat': {
 
       class { '::ius':
-        before => Package['php-pecl-mongo'];
+        before => Package['php55u-pecl-mongo'];
       }
 
       package {
