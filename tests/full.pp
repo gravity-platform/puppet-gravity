@@ -22,8 +22,9 @@ node default {
           ensure  => absent,
 	  require => Class['syslogng'];
 	'syslog-ng-mongodb':
-	  ensure => present,
-	  before => Class['mongodb'];
+	  ensure  => present,
+	  require => Package['rsyslog'],
+	  before  => Class['mongodb'];
 	['php-xml', 'php-pdo', 'php-pecl-mongo']:
 	  ensure => present,
 	  before => Class['apache::mod::php'];
@@ -69,8 +70,6 @@ node default {
       ;
     'apache::mod::php':
       ;
-    'apache::mod::dir':
-      indexes => [];
     'apache::mod::alias':
       ;
     'apache::mod::rewrite':
