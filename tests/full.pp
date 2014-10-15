@@ -38,8 +38,10 @@ node default {
   }
 
   class {
-    'mongodb':
-      packagename => 'mongodb-org';
+    '::mongodb::server':
+      user         => 'mongod',
+      group        => 'mongod',
+      package_name => 'mongodb-org';
     'apache':
       default_mods  => false,
       default_vhost => false;
