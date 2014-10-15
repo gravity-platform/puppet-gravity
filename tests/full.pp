@@ -66,9 +66,21 @@ node default {
       ;
   }
 
-  #resources { 'firewall':
-  #  purge => true
-  #}
+  resources { 'firewall':
+    purge => false,
+  }
+  Firewall {
+    before => Class['gravity::firewall::post'],
+    require => [
+      Class['gravity::firewall::pre'],
+    ]
+  }
+  class {
+    'firewall': ;
+  }
+  class { ['gravity::firewall::pre', 'gravity::firewall::post']:
+    require => Class['firewall']
+  }
 
   file {
     '/vagrant/web':
