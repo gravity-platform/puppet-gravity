@@ -103,6 +103,7 @@ node default {
     rewrite_rule    => '(.*) /app_dev.php/$1 [QSA]',
   }
 
+  Package['rsyslog'] -> Class['syslogng']
   Class['syslogng'] -> Class['gravity']
   File['/vagrant/web'] -> Apache::Vhost[$hostname]
   Apache::Vhost[$hostname] -> Class['gravity']
