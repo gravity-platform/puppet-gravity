@@ -30,7 +30,8 @@ node default {
           notify => Class['::apache'];
         ['php55u-pdo', 'php55u-pecl-mongo', ]:
           ensure => present,
-          before => Class['::apache::mod::php'];
+          before => Class['::apache::mod::php'],
+          notify => Class['::apache'];
       }
     }
   }
@@ -106,6 +107,12 @@ node default {
     ]
   }
 
+  exec { 'restart apache':
+    command     => '/etc/init.d/httpd restart',
+    refreshonly => true,
+  }
+
   File['/vagrant/web'] -> Apache::Vhost[$hostname]
-  Apache::Vhost[$hostname] -> Class['gravity']
+  Class['gravity'] -> Apache::Vhost[$hostname]
+  Service['httpd'] ~> Exec['restart apache']
 }
