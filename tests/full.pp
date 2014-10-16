@@ -42,7 +42,15 @@ node default {
     '/etc/php.d/timezone.ini':
       content => 'date.timezone=Europe/Zurich',
       before  => Class['::apache::mod::php'],
-      notify  => Class['::apache']
+      notify  => Class['::apache'];
+    '/var/log/php':
+      ensure  => directory,
+      owner   => 'apache',
+      group   => 'apache';
+    '/etc/php.d/log.ini':
+      content => 'error_log=/var/log/php/php.log',
+      before  => Class['::apache::mod::php'],
+      notify  => Class['::apache'];
   }
 
   class {
